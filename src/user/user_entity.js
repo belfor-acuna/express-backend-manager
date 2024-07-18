@@ -15,6 +15,16 @@ const userSchema = new mongoose.Schema({
         required: false,
         unique: false,
     },
+    hash: {
+        type: String,
+        required: true,
+        unique: false,
+    },
+    salt: {
+        type: String,
+        required: true,
+        unique: false,
+    },
     surname: {
         type: String,
         required: false,

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {sectionSchema} from "../section/section_entity.js";
+import sectionSchema from "../section/section_entity.js";
 
 const docSchema = new mongoose.Schema({
     title: {
