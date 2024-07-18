@@ -2,6 +2,7 @@ import express from "express";
 import { port } from "./config/environment.js";
 import cors from 'cors';
 import connectDB from './config/mongo/mongo_config.js'
+import authRoutes from './auth/auth_routes.js'
 
 const app = express();
 app.use(express.json());
@@ -13,7 +14,7 @@ app.use(cors({
   origin:allowedOrigins
 }));
 
-
+app.use('/api/v1/auth', authRoutes)
 app.use(cors());
 
 async function startServer() {
