@@ -16,4 +16,7 @@ export default function connectDB() {
 }
 
 async function registerModels() {
+    await import('../../user/user_entity.js');
+    await import('../../doc/document_entity.js');
+    await import('../../template/template_entity.js');
 }
