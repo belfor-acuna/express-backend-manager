@@ -1,11 +1,7 @@
 import mongoose from "mongoose";
 import sectionSchema from "../section/section_entity.js";
- 
+
 const templateSchema = new mongoose.Schema({
-    type: {
-        type: String,
-        required: true,
-    },
     title: {
         type: String,
         required: true,

@@ -6,28 +6,25 @@ const docSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    type: {
-        type: String, 
-        required: true,
-    },
     owner: {
-        type: String, 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: true,
-        ref: "User"
     },
     reader: {
-        type: String, 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: false,
-        ref: "User"
     },
     editor: {
-        type: String, 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: false,
-        ref: "User"
     },
     template: {
-        type: String,
-        required: false
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Template",
+        required: true,
     },
     sections: {
         type: [sectionSchema],

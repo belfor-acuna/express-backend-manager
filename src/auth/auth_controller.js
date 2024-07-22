@@ -1,7 +1,4 @@
-import express from 'express';
 import AuthService from './auth_services.js';
-
-const router = express.Router();
 
 // Registro de usuario
 export async function register(req, res){
@@ -40,4 +37,3 @@ export async function getMe(req, res) {
   }
 };
 
-export default router;
