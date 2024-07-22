@@ -29,3 +29,12 @@ export async function getMyDocs(userId){
         return { error: error.message, status:400}
     }
 }
+
+export async function getDocById(docId, userId) {
+    try {
+        const doc = await Doc.findOne({ owner: userId, _id: docId });
+        return { doc: doc, status: 200 };
+    } catch (error) {
+        return { error: error.message, status: 400 };
+    }
+}
