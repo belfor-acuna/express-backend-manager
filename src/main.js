@@ -1,10 +1,11 @@
 import express from "express";
 import { port } from "./config/environment.js";
 import cors from 'cors';
-import connectDB from './config/mongo/mongo_config.js'
-import authRoutes from './auth/auth_routes.js'
-import docRoutes from './doc/document_routes.js'
-import templateRoutes from './template/template_routes.js'
+import connectDB from './config/mongo/mongo_config.js';
+import authRoutes from './auth/auth_routes.js';
+import docRoutes from './doc/document_routes.js';
+import templateRoutes from './template/template_routes.js';
+import sectionRoutes from './section/section_routes.js';
 
 const app = express();
 app.use(express.json());
@@ -18,7 +19,8 @@ app.use(cors({
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/doc',docRoutes);
-app.use('/api/v1/template', templateRoutes)
+app.use('/api/v1/template', templateRoutes);
+app.use('/api/v1/section', sectionRoutes)
 app.use(cors());
 
 async function startServer() {
