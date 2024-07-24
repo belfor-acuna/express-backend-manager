@@ -10,3 +10,13 @@ export async function createTemplate(req,res){
     res.status(200).json({ message: result.message, templateId: result.templateId });
 
 }
+
+export async function getTemplates(req,res){
+    const result = await templateServices.getTemplates();
+    try{
+        return res.status(result.status).send({ ...result });
+    } catch (error) {
+        return { error: error.message, status: 400 }
+    }
+
+}

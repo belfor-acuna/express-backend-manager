@@ -23,3 +23,12 @@ export async function createTemplate(title,description,sections){
         return { error: error.message, status: 400};
     }
 }
+
+export async function getTemplates(){
+    try{
+        const templates = await Template.find();
+        return {templates: templates, status:200};
+    }catch(error){
+        return { error: error.message, status: 400}
+    }
+}
