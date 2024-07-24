@@ -30,7 +30,7 @@ class AuthService {
 
   async getUserInfo(token) {
     const decoded = verifyToken(token);
-    const user = await userModel.findById(decoded.id);
+    const user = await userModel.findById(decoded._id);
     if (!user) {
       throw new Error('User not found');
     }
