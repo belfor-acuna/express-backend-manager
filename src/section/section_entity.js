@@ -3,8 +3,12 @@ import SectionStatus from "./enum/section_status.js";
 
 const sectionSchema = new mongoose.Schema({
     id: {
-        type: String,
+        type: Number,
         required: true,
+    },
+    type:{
+        type: String,
+        default:'section'
     },
     title: {
         type: String,

@@ -29,6 +29,18 @@ const docSchema = new mongoose.Schema({
     sections: {
         type: [sectionSchema],
         required: false,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now,
+    },
+    shared:{
+        type:Boolean,
+        default:false
     }
 });
 

@@ -16,6 +16,7 @@ export async function updateSectionContent(docId, userId, sectionId, content) {
 
     section.content = content;
     section.status = SectionStatus.EDITING;
+    document.updatedAt = Date.now();
     try {
         await document.save();
         return { message: "Contenido de la sección actualizado con éxito", status: 200 };
