@@ -41,6 +41,10 @@ const docSchema = new mongoose.Schema({
     shared:{
         type:Boolean,
         default:false
+    },
+    color:{
+        type: String,
+        default: "#FF0000"
     }
 });
 
