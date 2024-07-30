@@ -39,7 +39,7 @@ export async function updateSectionStatus(docId, userId, sectionId, status) {
     }
 
     section.status = status;
-
+    document.updatedAt = Date.now();
     try {
         await document.save();
         return { message: "Estado de la sección actualizado con éxito", status: 200 };
