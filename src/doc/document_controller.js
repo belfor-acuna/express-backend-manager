@@ -43,5 +43,16 @@ export async function updateColor(req,res){
         return res.status(result.status).send({ ...result });
     } catch (error) {
         return { error: error.message, status: 400 }
+    }   
+}
+
+export async function updateTitle(req,res){
+    const{docId, title} = req.body;
+    const userId = req.user._id;
+    try{
+        const result = await docService.updateTitle(docId,userId,title);
+        return res.status(result.status).send({ ...result });
+    } catch (error) {
+        return { error: error.message, status: 400 }
     }
 }

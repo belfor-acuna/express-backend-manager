@@ -49,3 +49,14 @@ export async function updateColor(docId,userId,color){
         return {error: error.message, status:400}
     }
 }
+
+export async function updateTitle(docId,userId,title){
+    try{
+        const doc = await Doc.findOne({owner:userId, _id:docId});
+        doc.title = title;
+        await doc.save();
+        return {message: `Titulo de documento actualizado con éxito`, status: 200}
+    }catch(error){
+        return {error: error.message, status:400}
+    }
+}
