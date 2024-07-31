@@ -34,3 +34,14 @@ export async function getDocById(req, res) {
         return { error: error.message, status: 400 }
     }
 }
+
+export async function updateColor(req,res){
+    const{docId, color} = req.body;
+    const userId = req.user._id;
+    try{
+        const result = await docService.updateColor(docId,userId,color);
+        return res.status(result.status).send({ ...result });
+    } catch (error) {
+        return { error: error.message, status: 400 }
+    }
+}

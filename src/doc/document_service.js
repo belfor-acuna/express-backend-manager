@@ -38,3 +38,14 @@ export async function getDocById(docId, userId) {
         return { error: error.message, status: 400 };
     }
 }
+
+export async function updateColor(docId,userId,color){
+    try{
+        const doc = await Doc.findOne({owner:userId, _id:docId});
+        doc.color = color;
+        await doc.save();
+        return {message: `Color de documento actualizado con éxito`, status: 200}
+    }catch(error){
+        return {error: error.message, status:400}
+    }
+}
