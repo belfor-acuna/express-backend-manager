@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import sectionSchema from "../section/section_entity.js";
+import metadataSchema from "./metadata_entity.js";
 
 const docSchema = new mongoose.Schema({
     title: {
@@ -38,14 +39,19 @@ const docSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    shared:{
-        type:Boolean,
-        default:false
+    shared: {
+        type: Boolean,
+        default: false
     },
-    color:{
+    color: {
         type: String,
         default: "#FF0000"
-    }
+    },
+    metadata: {
+        type: metadataSchema,
+        required: false,
+        default: {}, // Añadir valor por defecto
+    },
 });
 
 const docModel = mongoose.model("Document", docSchema);

@@ -56,3 +56,28 @@ export async function updateTitle(req,res){
         return { error: error.message, status: 400 }
     }
 }
+
+//metadata update
+export async function getMetadata(req, res) {
+    const docId = req.query.docId;
+    const userId = req.user._id;
+  
+    try {
+      const result = await docService.getMetadata(docId, userId);
+      return res.status(result.status).send({ ...result });
+    } catch (error) {
+      return res.status(500).send({ error: error.message });
+    }
+  }
+  
+export async function updateMetadata(req, res) {
+    const { docId, metadata } = req.body;
+    const userId = req.user._id;
+  
+    try {
+      const result = await docService.updateMetadata(docId, userId, metadata);
+      return res.status(result.status).send({ ...result });
+    } catch (error) {
+      return res.status(500).send({ error: error.message });
+    }
+  }
