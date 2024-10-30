@@ -20,3 +20,13 @@ export async function getTemplates(req,res){
     }
 
 }
+
+export async function deleteTemplate(req, res) {
+    const { id } = req.params;
+
+    const result = await templateServices.deleteTemplate(id);
+    if (result.status !== 200) {
+        return res.status(result.status).json({ error: result.error });
+    }
+    res.status(200).json({ message: result.message });
+}

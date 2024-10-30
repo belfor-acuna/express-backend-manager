@@ -13,16 +13,19 @@ export async function findTemplate(templateName) {
     }
 }
 
-export async function createTemplate(title,description,sections){
-    try{
+export async function createTemplate(title, description, sections) {
+    try {
         const newTemplate = await Template.create({
-            title,description,sections
-        })
-        return { message: "Template creado con éxito", templateId: newTemplate._id, status: 200};
-    }catch(error){
-        return { error: error.message, status: 400};
+            title,
+            description,
+            sections, 
+        });
+        return { message: "Template creado con éxito", templateId: newTemplate._id, status: 200 };
+    } catch (error) {
+        return { error: error.message, status: 400 };
     }
 }
+
 
 export async function getTemplates(){
     try{
@@ -30,5 +33,18 @@ export async function getTemplates(){
         return {templates: templates, status:200};
     }catch(error){
         return { error: error.message, status: 400}
+    }
+}
+
+export async function deleteTemplate(templateId) {
+    try {
+        const result = await Template.findByIdAndDelete(templateId);
+        if (result) {
+            return { message: "Template eliminado con éxito", status: 200 };
+        } else {
+            return { error: "Template no encontrado", status: 404 };
+        }
+    } catch (error) {
+        return { error: error.message, status: 400 };
     }
 }
