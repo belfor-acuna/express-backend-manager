@@ -21,6 +21,17 @@ export async function getTemplates(req,res){
 
 }
 
+export async function getOneTemplate(req,res){
+    const {templateId} = req.params;
+    const result = await templateServices.findTemplate(templateId);
+    try{
+        return res.status(result.status).send({ ...result });
+    } catch (error) {
+        return { error: error.message, status: 400 }
+    }
+
+}
+
 export async function deleteTemplate(req, res) {
     const { id } = req.params;
 
