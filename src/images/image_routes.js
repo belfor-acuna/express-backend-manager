@@ -1,6 +1,6 @@
 import express from 'express';
 import upload from './multer_config.js'; 
-import { uploadImage } from './image_controller.js';
+import { uploadImage, deleteImageFromR2 } from './image_controller.js';
 import authMiddleware from '../auth/middleware/auth_middleware.js';
 
 const router = express.Router();
@@ -12,5 +12,6 @@ router.post(
   upload.single('image'), 
   uploadImage, 
 );
+router.delete('/delete', authMiddleware, deleteImageFromR2);
 
 export default router;
