@@ -3,12 +3,12 @@ const router = express.Router();
 import authMiddleware from '../auth/middleware/auth_middleware.js';
 import roleMiddleware from '../user/middleware/role_middleware.js';
 import UserRoles from '../user/enum/user_roles.js';
-import { createTemplate, getTemplates,deleteTemplate, getOneTemplate } from './template_controller.js';
+import { createTemplate, getTemplates,deleteTemplate, getOneTemplate, updateTemplate } from './template_controller.js';
 
 router.post('/new', authMiddleware, roleMiddleware([UserRoles.ADMIN]), createTemplate);
 router.get('/all',authMiddleware,roleMiddleware([UserRoles.ADMIN,UserRoles.USER]), getTemplates);
 router.delete('/delete/:id', authMiddleware, roleMiddleware([UserRoles.ADMIN]), deleteTemplate);
 router.get('/:templateId',authMiddleware,roleMiddleware([UserRoles.ADMIN,UserRoles.USER]), getOneTemplate);
-
+router.put('/update/:templateId', authMiddleware, roleMiddleware([UserRoles.ADMIN]), updateTemplate);
 
 export default router;

@@ -52,3 +52,25 @@ export async function deleteTemplate(templateId) {
         return { error: error.message, status: 400 };
     }
 }
+
+export async function updateTemplate(templateId, title, description, sections) {
+    try {
+        const updatedTemplate = await Template.findByIdAndUpdate(
+            templateId,
+            {
+                title,
+                description,
+                sections
+            },
+            { new: true } 
+        );
+
+        if (updatedTemplate) {
+            return { message: "Template actualizado con éxito", status: 200 };
+        } else {
+            return { error: "Template no encontrado", status: 404 };
+        }
+    } catch (error) {
+        return { error: error.message, status: 400 };
+    }
+}
