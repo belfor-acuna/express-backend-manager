@@ -63,6 +63,7 @@ export async function updatePassword (req,res){
   const{ newPassword,email} = req.body;
   try{
     const result = await AuthService.updatePassword(email,newPassword);
+    res.json(result);
   }catch(e){
     res.status(500).json({error: e.message});
   }
