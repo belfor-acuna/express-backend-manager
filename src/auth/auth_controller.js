@@ -37,3 +37,33 @@ export async function getMe(req, res) {
     res.status(500).json({ error: err.message });
   }
 };
+
+//forgotPassword?
+export async function forgotPassword(req,res){
+  const email = req.body.email;
+  try{
+    const result = await AuthService.createRecoveryFlow(email);
+    res.json(result);
+  }catch(e){
+    res.status(500).json({error:e.message})
+  }
+}
+
+export async function validateRequest (req,res){
+  const {request,code} = req.body;
+  try{
+    const result = await AuthService.validateToken(code,request);
+    res.json(result);
+  }catch(e){
+    res.status(500).json({error:e.message});
+  }
+}
+
+export async function updatePassword (req,res){
+  const{ newPassword,email} = req.body;
+  try{
+    const result = await AuthService.updatePassword(email,newPassword);
+  }catch(e){
+    res.status(500).json({error: e.message});
+  }
+}
