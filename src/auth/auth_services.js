@@ -49,14 +49,25 @@ class AuthService {
   async createRecoveryFlow(email) {
     const user = await userModel.findOne({ email });
     if (user) {
-
+      // Verificar si ya existe un token activo
+      const activeToken = await PasswordResetToken.findOne({
+        email,
+        expiresAt: { $gt: new Date() }
+      });
+  
+      if (activeToken) {
+        return {
+          message: `Ya se ha enviado un correo electrónico al correo ${email} recientemente. Por favor revisa tu bandeja o inténtalo más tarde.`,
+          status: 200,
+          requestId: activeToken._id
+        };
+      }
+      
+      // Si no existe un token activo, creamos uno nuevo
       const token = crypto.randomBytes(6).toString("hex"); // Token aleatorio
       const salt = bcrypt.genSaltSync(12);
       const hash = bcrypt.hashSync(token, salt);
-
-      // Eliminamos los tokens previamente creados
-      await PasswordResetToken.deleteMany({ email });
-
+  
       // Guardar nuevo token en la BD con expiración de 15 min
       const resetToken = new PasswordResetToken({
         email,
@@ -64,15 +75,20 @@ class AuthService {
         salt,
         expiresAt: new Date(Date.now() + 1000 * 60 * 15), // 15 min
       });
-
+  
       await resetToken.save();
-
-      sendEmail(email, token)
-      return { message: `Se ha enviado un correo electrónico al correo ${email} con el código verificador`, status: 200, requestId: resetToken._id }
+  
+      sendEmail(email, token);
+      return {
+        message: `Se ha enviado un correo electrónico al correo ${email} con el código verificador`,
+        status: 200,
+        requestId: resetToken._id
+      };
     } else {
-      return { message: `No existe un usuario con este email: ${email}`, status: 500 }
+      return { message: `No existe un usuario con este email: ${email}`, status: 500 };
     }
   }
+  
 
   async validateToken(code, _id) {
     const passwordRecoveryRequest = await PasswordResetToken.findById(_id);
@@ -96,6 +112,7 @@ class AuthService {
       userFound.hash = hash;
       userFound.salt = salt;
       await userFound.save();
+      await PasswordResetToken.deleteMany({ email });
       return { message: 'Contraseña actualizada con éxito !', status: 200 };
     } else {
       return { message: `No existe un usuario con este email ${email}`, status: 500 }
