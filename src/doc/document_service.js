@@ -23,14 +23,15 @@ export async function createDoc(userId, title, templateName) {
     }
   }
 
-export async function getMyDocs(userId){
-    try{
-        const docs = await Doc.find({owner:userId});
-        return {docs : docs, status:200};
-    }catch(error){
-        return { error: error.message, status:400}
+  export async function getMyDocs(userId) {
+    try {
+      const docs = await Doc.find({ owner: userId }).populate('template', 'title');
+      return { docs, status: 200 };
+    } catch (error) {
+      return { error: error.message, status: 400 };
     }
-}
+  }
+  
 
 export async function getDocById(docId, userId) {
     try {

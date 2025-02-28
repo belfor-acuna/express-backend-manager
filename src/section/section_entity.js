@@ -16,6 +16,10 @@ const sectionSchema = new mongoose.Schema({
     },
     content: {
         type: String,
+        required: false,
+    },
+    explanation: {
+        type: String,
         required: true,
     },
     status: {
