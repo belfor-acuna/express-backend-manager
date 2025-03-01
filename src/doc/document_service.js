@@ -25,7 +25,7 @@ export async function createDoc(userId, title, templateName) {
 
   export async function getMyDocs(userId) {
     try {
-      const docs = await Doc.find({ owner: userId }).populate('template', 'title');
+      const docs = await Doc.find({ owner: userId });
       return { docs, status: 200 };
     } catch (error) {
       return { error: error.message, status: 400 };
