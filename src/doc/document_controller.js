@@ -24,6 +24,17 @@ export async function getMyDocs(req, res) {
     }
 }
 
+export async function deleteDoc(req, res) {
+    const docId = req.body.docId;
+    const userId = req.user._id;
+    try {
+        const result = await docService.deleteDoc(docId, userId);
+        return res.status(result.status).send({ ...result });
+    } catch (error) {
+        return res.status(500).send({ error: error.message });
+    }
+}
+
 export async function getDocById(req, res) {
     const docId = req.body.docId;
     const userId = req.user._id;

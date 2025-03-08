@@ -42,6 +42,22 @@ export async function getDocById(docId, userId) {
     }
 }
 
+export async function deleteDoc( docId, userId){
+    try{
+        const doc = await Doc.findOne({ owner: userId, _id: docId });
+        if (!doc) {
+            return { error: 'Documento no encontrado', status: 404 };
+        }else{
+            await Doc.deleteOne({ owner: userId, _id: docId });
+            return { message: 'Documento eliminado con éxito', status: 200 };
+        }
+    }
+    catch(error){
+        return {error: error.message, status:400}
+
+    }
+}
+
 export async function updateColor(docId,userId,color){
     try{
         const doc = await Doc.findOne({owner:userId, _id:docId});
@@ -105,3 +121,4 @@ export async function updateMetadata(docId, userId, metadata) {
       return { error: error.message, status: 400 };
   }
 }
+
