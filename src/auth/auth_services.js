@@ -20,6 +20,9 @@ class AuthService {
 
   async loginUser({ email, password }) {
     const user = await userModel.findOne({ email });
+    if (!user) {
+      throw new Error('Credenciales incorretas');
+    }
     const isMatch = bcrypt.compareSync(password, user.hash);
     if (!isMatch) {
       throw new Error('Credenciales incorretas');

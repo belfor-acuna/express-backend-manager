@@ -24,7 +24,7 @@ export async function login(req, res) {
     const result = await AuthService.loginUser({ email, password });
     res.json(result);
   } catch (err) {
-    if (err.message === "No existe una cuenta con este correo electrónico" || err.message === "Credenciales incorretas") {
+    if (err.message === "Credenciales incorretas") {
       res.status(401).json({ error: err.message });
     } else {
       res.status(500).json({ error: err.message });
