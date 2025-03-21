@@ -52,9 +52,9 @@ export async function forgotPassword(req, res) {
   const email = req.body.email;
   try {
     const result = await AuthService.createRecoveryFlow(email);
-    res.json(result);
+    res.status(result.status).json(result);
   } catch (e) {
-    res.status(500).json({ error: e.message })
+    res.status(500).json({ error: e.message });
   }
 }
 

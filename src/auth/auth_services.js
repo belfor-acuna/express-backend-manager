@@ -50,27 +50,44 @@ class AuthService {
 
   async createRecoveryFlow(email) {
     const user = await userModel.findOne({ email });
-    if (user) {
-      // Verificar si ya existe un token activo
-      const activeToken = await PasswordResetToken.findOne({
-        email,
-        expiresAt: { $gt: new Date() }
-      });
+    if (!user) {
+      return {
+        message: `Se ha enviado un correo electrónico al correo ${email} con el código verificador.`,
+        status: 200
+      };
+    }
   
-      if (activeToken) {
-        return {
-          message: `Ya se ha enviado un correo electrónico al correo ${email} recientemente. Por favor revisa tu bandeja o inténtalo más tarde.`,
-          status: 200,
-          requestId: activeToken._id
-        };
-      }
-      
-      // Si no existe un token activo, creamos uno nuevo
-      const token = crypto.randomBytes(6).toString("hex"); // Token aleatorio
-      const salt = bcrypt.genSaltSync(12);
-      const hash = bcrypt.hashSync(token, salt);
+    // Verificar si ya existe un token activo
+    const activeToken = await PasswordResetToken.findOne({
+      email,
+      expiresAt: { $gt: new Date() },
+    });
   
-      // Guardar nuevo token en la BD con expiración de 15 min
+    if (activeToken) {
+      return {
+        message: `Ya se ha enviado un correo electrónico al correo ${email} recientemente. Por favor revisa tu bandeja o inténtalo más tarde.`,
+        status: 200,
+        requestId: activeToken._id,
+      };
+    }
+  
+    // Generar un token seguro de 6 caracteres (letras mayúsculas y números)
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const randomBytes = crypto.randomBytes(6);
+    let token = '';
+    for (let i = 0; i < 6; i++) {
+      const index = randomBytes[i] % characters.length;
+      token += characters[index];
+    }
+  
+    const salt = bcrypt.genSaltSync(12);
+    const hash = bcrypt.hashSync(token, salt);
+  
+    // Intentar enviar el correo electrónico antes de crear el registro en la base de datos
+    try {
+      await sendEmail(email, token);
+  
+      // Si el correo se envía correctamente, crear el registro en la base de datos
       const resetToken = new PasswordResetToken({
         email,
         hash,
@@ -80,14 +97,17 @@ class AuthService {
   
       await resetToken.save();
   
-      sendEmail(email, token);
       return {
         message: `Se ha enviado un correo electrónico al correo ${email} con el código verificador`,
         status: 200,
-        requestId: resetToken._id
+        requestId: resetToken._id,
       };
-    } else {
-      return { message: `No existe un usuario con este email: ${email}`, status: 500 };
+    } catch (error) {
+      console.error('Error al enviar el correo:', error);
+      return {
+        message: `Hubo un problema al enviar el correo electrónico. Por favor, inténtalo de nuevo más tarde.`,
+        status: 500,
+      };
     }
   }
   
