@@ -34,7 +34,7 @@ export default async function sendMailTo(to, token) {
       const info = await transporter.sendMail({
         from: "belforportfolioutility@gmail.com",
         to: to,
-        subject: "Password recovery",
+        subject: "Recuperación de contraseña",
         html:htmlContent,
       });
       

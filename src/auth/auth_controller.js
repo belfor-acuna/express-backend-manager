@@ -12,16 +12,19 @@ export async function register(req, res){
 };
 
 // Login de usuario
-export async function login(req, res){
+export async function login(req, res) {
   const { email, password } = req.body;
   try {
     const result = await AuthService.loginUser({ email, password });
     res.json(result);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    if (err.message === "No existe una cuenta con este correo electrónico" || err.message === "Credenciales incorretas") {
+      res.status(401).json({ error: err.message }); 
+    } else {
+      res.status(500).json({ error: err.message }); 
+    }
   }
-};
-
+}
 
 //getMe
 export async function getMe(req, res) {

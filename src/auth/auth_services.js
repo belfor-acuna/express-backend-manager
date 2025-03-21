@@ -9,7 +9,7 @@ class AuthService {
   async registerUser({ email, name, password, role }) {
     const salt = bcrypt.genSaltSync(12);
     const hash = bcrypt.hashSync(password, salt);
-
+    
     const user = new userModel({ _id: new mongoose.Types.ObjectId(), email, name, hash, salt, role });
     await user.save();
     return { message: 'User created successfully' };
@@ -18,12 +18,12 @@ class AuthService {
   async loginUser({ email, password }) {
     const user = await userModel.findOne({ email });
     if (!user) {
-      throw new Error('User not found');
+      throw new Error('No existe una cuenta con este correo electrónico');
     }
 
     const isMatch = bcrypt.compareSync(password, user.hash);
     if (!isMatch) {
-      throw new Error('Invalid credentials');
+      throw new Error('Credenciales incorretas');
     }
 
     const token = generateToken(user);
