@@ -9,7 +9,10 @@ class AuthService {
   async registerUser({ email, name, password, role }) {
     const salt = bcrypt.genSaltSync(12);
     const hash = bcrypt.hashSync(password, salt);
-    
+    const userExists = await userModel.findOne({ email });
+    if (userExists) {
+      throw new Error('Ya existe una cuenta asociada a este correo electrónico');
+    }
     const user = new userModel({ _id: new mongoose.Types.ObjectId(), email, name, hash, salt, role });
     await user.save();
     return { message: 'User created successfully' };
