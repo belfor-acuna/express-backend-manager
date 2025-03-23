@@ -16,4 +16,4 @@ build_and_push_image:
     - docker push $CI_REGISTRY_IMAGE:latest
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
   only:
-    - develop
+    - main
