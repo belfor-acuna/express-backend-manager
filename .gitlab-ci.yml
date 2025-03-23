@@ -12,7 +12,7 @@ build_image:
   image: docker:latest
   script:
     - docker build -t $CI_REGISTRY_IMAGE:latest .
-    - echo "CI_SHORT_SHA: $CI_SHORT_SHA"
+    - echo $CI_SHORT_SHA
     - docker tag $CI_REGISTRY_IMAGE:latest $CI_REGISTRY_IMAGE:$CI_SHORT_SHA
   only:
     - develop
