@@ -4,11 +4,12 @@ stages:
 
 build_image:
   stage: build
+  image: docker:latest
   script:
     - docker build -t $CI_REGISTRY_IMAGE:latest .
     - docker tag $CI_REGISTRY_IMAGE:latest $CI_REGISTRY_IMAGE:$CI_SHORT_SHA
   only:
-    - main
+    - develop
 
 push_image:
   stage: push
