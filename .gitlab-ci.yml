@@ -2,6 +2,11 @@ stages:
   - build
   - push
 
+services:
+  - name: docker:19.03.12-dind
+    alias: docker
+
+
 build_image:
   stage: build
   image: docker:latest
