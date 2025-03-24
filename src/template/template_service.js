@@ -1,11 +1,9 @@
 import Template from './template_entity.js';
 
 export async function findTemplate(templateId) {
-    console.log("Buscando template con ID:", templateId);
     try {
         const template = await Template.findById(templateId);
         if (template) {
-            console.log("Template encontrado:", template); 
             return { template:template, status: 200 };
         } else {
             return { error: "Template not found", status: 404 };
