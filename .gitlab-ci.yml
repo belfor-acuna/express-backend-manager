@@ -1,0 +1,19 @@
+stages:
+  - build_and_push
+
+services:
+  - name: docker:19.03.12-dind
+    alias: docker
+
+build_and_push_image:
+  stage: build_and_push
+  image: docker:latest
+  script:
+    - echo $CI_REGISTRY_IMAGE:latest
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
+    - docker tag $CI_REGISTRY_IMAGE:latest $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    - docker push $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  only:
+    - main
