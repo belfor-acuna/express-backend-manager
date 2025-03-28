@@ -13,7 +13,7 @@ app.use(express.json());
 
 const allowedOrigins = [
   'https://tendify.duckdns.org',
-  'http://localhost:5173'         
+  'http://localhost:4173'         
 ];
 
 app.use(cors({
