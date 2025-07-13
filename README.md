@@ -1,93 +1,245 @@
-# t2r2-backend
+# T2R2 Backend - Document Management System
 
+A robust, scalable backend API for document management and template-based content creation, built with modern Node.js technologies and enterprise-grade architecture.
 
+## 🚀 Overview
 
-## Getting started
+T2R2 is a comprehensive document management system that enables users to create, manage, and collaborate on structured documents using customizable templates. The system features role-based access control, real-time content editing, cloud storage integration, and automated email notifications.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## ✨ Key Features
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+### 🔐 Authentication & Authorization
+- **JWT-based authentication** with secure token management
+- **Role-based access control** (Admin/User roles)
+- **Password recovery system** with email verification
+- **Secure password hashing** using bcrypt with salt
 
-## Add your files
+### 📄 Document Management
+- **Template-based document creation** with predefined structures
+- **Real-time section editing** with status tracking
+- **Document metadata management** for tender/procurement data
+- **Document sharing and collaboration** features
+- **Color-coded organization** system
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### 🎨 Template System
+- **Dynamic template creation** and management
+- **Section-based content structure** with customizable fields
+- **Template versioning** and reusability
+- **Admin-controlled template lifecycle**
 
+### 🖼️ Media Management
+- **Cloudflare R2 integration** for scalable image storage
+- **Secure file upload** with validation and size limits
+- **Automatic file organization** by user and timestamp
+- **Image deletion and cleanup** capabilities
+
+### 📧 Communication
+- **Gmail OAuth2 integration** for secure email delivery
+- **HTML email templates** for password recovery
+- **Automated notification system**
+
+## 🛠️ Technology Stack
+
+### Backend Framework
+- **Node.js** with ES6+ modules
+- **Express.js** for RESTful API development
+- **CORS** configuration for cross-origin requests
+
+### Database & ODM
+- **MongoDB** for document storage
+- **Mongoose** for elegant object modeling
+- **Schema validation** and relationship management
+
+### Authentication & Security
+- **JSON Web Tokens (JWT)** for stateless authentication
+- **bcrypt/bcryptjs** for password hashing
+- **Role-based middleware** for authorization
+- **Input validation** and sanitization
+
+### Cloud Services
+- **Cloudflare R2** (S3-compatible) for file storage
+- **AWS SDK** for cloud service integration
+- **Gmail API** with OAuth2 for email services
+
+### File Processing
+- **Multer** for multipart/form-data handling
+- **Memory storage** for efficient file processing
+- **MIME type validation** for security
+
+### Development & Deployment
+- **Nodemon** for development hot-reloading
+- **Docker** containerization
+- **GitLab CI/CD** pipeline
+- **Environment-based configuration**
+
+## 🏗️ Architecture
+
+### Modular Structure
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/t2r2/t2r2-backend.git
-git branch -M main
-git push -uf origin main
+src/
+├── auth/           # Authentication & authorization
+├── config/         # Environment & service configurations
+├── doc/            # Document management
+├── images/         # File upload & storage
+├── mailer/         # Email services
+├── section/        # Document section management
+├── template/       # Template system
+└── user/           # User management
 ```
 
-## Integrate with your tools
+### API Design
+- **RESTful endpoints** with consistent naming
+- **Versioned API** (`/api/v1/`) for future compatibility
+- **Middleware-based architecture** for cross-cutting concerns
+- **Error handling** with appropriate HTTP status codes
 
-- [ ] [Set up project integrations](https://gitlab.com/t2r2/t2r2-backend/-/settings/integrations)
+## 📡 API Endpoints
 
-## Collaborate with your team
+### Authentication
+```
+POST   /api/v1/auth/register      # User registration
+POST   /api/v1/auth/login         # User login
+POST   /api/v1/auth/recovery      # Password recovery request
+POST   /api/v1/auth/recovery/update # Password reset
+GET    /api/v1/auth/me           # Get current user info
+```
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+### Document Management
+```
+POST   /api/v1/doc/new           # Create new document
+GET    /api/v1/doc/all           # Get user's documents
+GET    /api/v1/doc/one           # Get specific document
+PATCH  /api/v1/doc/color         # Update document color
+PATCH  /api/v1/doc/title         # Update document title
+DELETE /api/v1/doc/delete        # Delete document
+```
 
-## Test and Deploy
+### Template System
+```
+POST   /api/v1/template/new      # Create template (Admin)
+GET    /api/v1/template/all      # Get all templates
+GET    /api/v1/template/:id      # Get specific template
+PUT    /api/v1/template/update/:id # Update template (Admin)
+DELETE /api/v1/template/delete/:id # Delete template (Admin)
+```
 
-Use the built-in continuous integration in GitLab.
+### Section Management
+```
+PATCH  /api/v1/section/save      # Update section content
+PATCH  /api/v1/section/status    # Update section status
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### Image Management
+```
+POST   /api/v1/images/upload     # Upload image to R2
+DELETE /api/v1/images/delete     # Delete image from R2
+```
 
-***
+## 🔧 Installation & Setup
 
-# Editing this README
+### Prerequisites
+- Node.js 16+
+- MongoDB instance
+- Cloudflare R2 bucket
+- Gmail account with OAuth2 setup
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### Environment Variables
+```env
+PORT=3555
+MONGO_URI=mongodb://localhost:27017/t2r2
+JWT_SECRET=your_jwt_secret
 
-## Suggestions for a good README
+# Cloudflare R2
+R2_ENDPOINT=https://your-account.r2.cloudflarestorage.com
+R2_ACCESS_KEY_ID=your_access_key
+R2_SECRET_ACCESS_KEY=your_secret_key
+R2_BUCKET_NAME=your_bucket_name
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+# Gmail OAuth2
+CLIENT_ID=your_gmail_client_id
+CLIENT_SECRET=your_gmail_client_secret
+REDIRECT_URI=your_redirect_uri
+REFRESH_TOKEN=your_refresh_token
+MY_EMAIL=your_email@gmail.com
+```
 
-## Name
-Choose a self-explaining name for your project.
+### Local Development
+```bash
+# Install dependencies
+npm install
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+# Start development server
+npm start
+```
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+### Docker Deployment
+```bash
+# Build Docker image
+docker build -t t2r2-backend .
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+# Run container
+docker run -p 3555:3555 --env-file .env t2r2-backend
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## 🚀 Deployment
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### GitLab CI/CD Pipeline
+The project includes automated deployment with:
+- **Docker image building** and registry push
+- **Infrastructure triggering** for seamless deployments
+- **Environment-specific configurations**
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+### Production Considerations
+- **Environment variable management**
+- **Database connection pooling**
+- **Error logging and monitoring**
+- **Rate limiting** implementation
+- **API documentation** with Swagger/OpenAPI
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+## 🧪 Testing
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### Recommended Testing Strategy
+```bash
+# Unit tests for services
+npm test
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+# Integration tests for API endpoints
+npm run test:integration
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+# Load testing for performance
+npm run test:load
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## 📊 Performance Features
 
-## License
-For open source projects, say how it is licensed.
+- **Connection pooling** for database efficiency
+- **Memory-based file processing** for speed
+- **Optimized MongoDB queries** with proper indexing
+- **Stateless JWT authentication** for scalability
+- **Cloud storage integration** for media handling
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## 🔒 Security Features
+
+- **Password hashing** with bcrypt and salt
+- **JWT token expiration** and validation
+- **Role-based access control** middleware
+- **File type validation** for uploads
+- **CORS configuration** for cross-origin security
+- **Input sanitization** and validation
+
+## 🤝 Contributing
+
+This project demonstrates enterprise-level backend development practices including:
+- Clean architecture with separation of concerns
+- Comprehensive error handling
+- Security best practices
+- Scalable cloud integrations
+- Modern JavaScript/Node.js patterns
+
+## 📄 License
+
+This project is part of a portfolio demonstration showcasing full-stack development capabilities.
+
+---
+
+**Built with ❤️ using Node.js, Express, MongoDB, and modern cloud technologies**
