@@ -10,12 +10,6 @@ import imageRoutes from './images/image_routes.js';
 
 const app = express();
 app.use(express.json());
-
-const allowedOrigins = [
-  'https://tendify.duckdns.org',
-  'http://localhost:4173'         
-];
-
 app.use(cors({
   origin: allowedOrigins,
   credentials: true
