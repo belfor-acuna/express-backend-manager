@@ -3,11 +3,11 @@ import mongoose from 'mongoose';
 
 const metadataSchema = new mongoose.Schema({
   fechaPublicacion: {
-    type: Date,
+    type: String,
     required: false,
   },
   fechaCierre: {
-    type: Date,
+    type: String,
     required: false,
   },
   montoEstimado: {

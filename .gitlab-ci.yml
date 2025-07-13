@@ -1,19 +1,29 @@
 stages:
   - build_and_push
+  - trigger_infrastructure  
 
 services:
   - name: docker:19.03.12-dind
     alias: docker
 
-build_and_push_image:
+build_and_push:
   stage: build_and_push
   image: docker:latest
   script:
-    - echo $CI_REGISTRY_IMAGE:latest
     - docker build -t $CI_REGISTRY_IMAGE:latest .
-    - docker tag $CI_REGISTRY_IMAGE:latest $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
     - docker push $CI_REGISTRY_IMAGE:latest
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-  only:
-    - main
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"  
+
+trigger_infrastructure:
+  stage: trigger_infrastructure  
+  script:
+    - curl -X POST 
+      -F "token=${INFRA_TRIGGER_TOKEN}" 
+      -F "ref=main" 
+      "${INFRA_TRIGGER_URL}"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"  
+      when: on_success 
+ 

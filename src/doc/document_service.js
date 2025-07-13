@@ -25,7 +25,7 @@ export async function createDoc(userId, title, templateName) {
 
   export async function getMyDocs(userId) {
     try {
-      const docs = await Doc.find({ owner: userId });
+      const docs = await Doc.find({ owner: userId })
       return { docs, status: 200 };
     } catch (error) {
       return { error: error.message, status: 400 };
@@ -98,27 +98,36 @@ export async function getMetadata(docId, userId) {
   }
 }
 
-// Actualizar la metadata de un documento
 export async function updateMetadata(docId, userId, metadata) {
-  try {
+    try {
       const doc = await Doc.findOne({ owner: userId, _id: docId });
+      
       if (!doc) {
-          return { error: 'Documento no encontrado', status: 404 };
+        return { error: 'Documento no encontrado', status: 404 };
       }
-      // Inicializar metadata si está ausente
-      if (!doc.metadata) {
-          doc.metadata = {};
-      }
-      // Actualizar los campos de metadata
-      doc.metadata = {
-          ...doc.metadata,
-          ...metadata,
-      };
+  
+      doc.metadata = doc.metadata || {};
+  
+      const fieldsToUpdate = [
+        'fechaPublicacion',
+        'fechaCierre',
+        'montoEstimado',
+        'organismoLicitante',
+        'codigoIdentificacion',
+        'tipoLicitacion',
+        'descripcionBreve'
+      ];
+  
+      fieldsToUpdate.forEach(field => {
+        if (metadata[field] !== undefined) {
+          doc.metadata[field] = metadata[field];
+        }
+      });
   
       await doc.save();
       return { message: 'Metadata actualizada con éxito', status: 200 };
-  } catch (error) {
+  
+    } catch (error) {
       return { error: error.message, status: 400 };
+    }
   }
-}
-

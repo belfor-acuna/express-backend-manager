@@ -52,3 +52,19 @@ export async function updateTemplate(req, res) {
     }
     res.status(200).json({ message: result.message });
 }
+
+
+export async function getTemplateName(req, res) {
+  const { templateId } = req.params;
+  try {
+    const result = await templateServices.findTemplate(templateId);
+    if (result.status !== 200) {
+      return res.status(result.status).json({ error: result.error });
+    }
+    const templateName = result.template.title;
+    return res.status(200).json({ title: templateName });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
